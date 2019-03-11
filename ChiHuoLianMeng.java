@@ -1,4 +1,4 @@
-package 吃货联盟;
+package 数组_吃货联盟;
 /**
  * 吃货联盟订餐管理系统
  * 
@@ -10,15 +10,17 @@ import java.util.Scanner;
 public class ChiHuoLianMeng {
 
 	public static void main(String[] args) {
-		
 			
-			String[] names = new String[4]; //订餐人名称
-			String[] dishMegs = new String[4];// 所选菜品
-			int[] times = new int[4];// 送餐时间
-			String[] addresses = new String[4];// 送餐地址
-			int[] states = new int[4]; // 订单状态： 0：已预定 1：已完成
-			double[] sumPrices = new double[4];// 总金额
-			int numbers[] = new int[4]; //份数
+			int jieKeNum=100;
+			int caiPinNum=100;
+			 
+			String[] names = new String[jieKeNum]; //订餐人名称
+			String[] dishMegs = new String[jieKeNum];// 所选菜品
+			int[] times = new int[jieKeNum];// 送餐时间
+			String[] addresses = new String[jieKeNum];// 送餐地址
+			int[] states = new int[jieKeNum]; // 订单状态： 0：已预定 1：已完成
+			double[] sumPrices = new double[jieKeNum];// 总金额
+			int numbers[] = new int[jieKeNum]; //份数
 			
 			Scanner input = new Scanner(System.in);
 			//初始化2条订单信息
@@ -39,17 +41,17 @@ public class ChiHuoLianMeng {
 			sumPrices[1]=76.0;
 			
 			// 供选择的菜品信息
-			String[] dishNames = new String[5];//{ "红烧带鱼", "鱼香肉丝", "时令鲜蔬" }; 菜品名称
+			String[] dishNames = new String[caiPinNum];//{ "红烧带鱼", "鱼香肉丝", "时令鲜蔬" }; 菜品名称
 			dishNames[0]="红烧带鱼";
 			dishNames[1]="鱼香肉丝";
 			dishNames[2]="时令鲜蔬";
-			double[] prices = new double[5];//  { 38.0, 20.0, 10.0 };  菜品单价
+			double[] prices = new double[caiPinNum];//  { 38.0, 20.0, 10.0 };  菜品单价
 			prices[0]=38.0;
 			prices[1]=20.0;
 			prices[2]=10.0;
-			int[] dianZanNums = new int[5];
+			int[] dianZanNums = new int[caiPinNum];
 			String fanHui;//全局变量  输入任意值 都返回   重新执行系统
-			
+			String manageFanHui;
 			System.out.println("欢迎使用“吃货联盟订餐系统”");
 			do {
 				System.out.println("****************************");
@@ -58,10 +60,10 @@ public class ChiHuoLianMeng {
 				System.out.println("3、签收订单");
 				System.out.println("4、删除订单");
 				System.out.println("5、我要点赞");
-				System.out.println("6、添加菜品");
+				System.out.println("6、管理员");
 				System.out.println("7、退出系统");
 				System.out.println("****************************");
-				System.out.println("请选择：");
+				System.out.print("请选择：");
 				int chooseId = input.nextInt();
 				boolean isAdd =false;//true :记录找到一个为空的位置，可以插入   false:没有找到
 				switch (chooseId) {
@@ -215,13 +217,13 @@ public class ChiHuoLianMeng {
 					System.out.print("请输入要删除的订单序号:");
 					int delNum = input.nextInt();
 					for(int i =0;i<names.length;i++){
-						if(names[i]!=null &&states[i]==1&&delNum==i+1){
+						if(names[i]!=null &&states[i]==0&&delNum==i+1){
 							delIndex = i;
 							isDelNum = true;
 							break;
 							
-						}else if(names[i]!=null &&states[i]==0&&delNum==i+1){
-							System.out.println("您选择的订单未签收，不能删除！");
+						}else if(names[i]!=null &&states[i]==1&&delNum==i+1){
+							System.out.println("您选择的订单已签收，不能删除！");
 							isDelNum = true;
 							break;
 						}
@@ -229,7 +231,7 @@ public class ChiHuoLianMeng {
 					if(!isDelNum){
 						System.out.println("您要删除的订单不存在!!!");
 					}
-					if(delIndex!=-1){
+					if(delIndex!=-1){		//依次从后往前赋值
 						for(int i =delIndex+1;i<names.length;i++){
 							names[i-1] = names[i];
 							dishMegs[i-1]=dishMegs[i];
@@ -239,7 +241,7 @@ public class ChiHuoLianMeng {
 							sumPrices[i-1]=sumPrices[i];
 							states[i-1]=states[i];
 						}
-						names[names.length-1] = null;
+						names[names.length-1] = null;//清空要删除的订单
 						dishMegs[names.length-1] =null;
 						numbers[names.length-1]=0;
 						times[names.length-1]=0;
@@ -252,7 +254,7 @@ public class ChiHuoLianMeng {
 				case 5:
 					System.out.println("******我要点赞******");
 					System.out.println("序号\t菜名\t单价");
-					for(int i =0;i<dishNames.length;i++){
+					for(int i =0;i<dishNames.length;i++){//循环遍历菜单
 						if(dishNames[i]!=null){
 						System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
 						}
@@ -261,7 +263,7 @@ public class ChiHuoLianMeng {
 					System.out.print("请选择您要点赞的菜品序号：");
 					int dianZanXuHao = input.nextInt();
 						
-					if(dianZanXuHao>dishNames.length||dianZanXuHao<=0){
+					if(dianZanXuHao>dishNames.length||dianZanXuHao<=0){//对数据的处理   判断是否输入正确
 						System.out.print("没有该商品，点赞错误! \n请重新输入:");
 						
 						dianZanXuHao = input.nextInt();
@@ -272,45 +274,148 @@ public class ChiHuoLianMeng {
 					
 					break;
 				case 6:
-					System.out.println("******添加菜品******");
+					System.out.println("******管理员******");
 					System.out.println("请输入管理员密码:");
 					String shuRu = input.next();//添加一个管理员密码  只要管理员才能添加菜品
 					String password = "123";
 					if(shuRu.equals(password)){
-						
-						System.out.println("序号\t菜名\t单价");//遍历已有菜单
-						for(int i =0;i<dishNames.length;i++){
-							if(dishNames[i]!=null){
-							System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
-							}
-						}
-						System.out.println("菜品名称:");
-						String tianJiaDishName = input.next();
-						System.out.println("请输入菜品价格:");
-						double price = input.nextInt();
-						int index=-1;//初始化 插入元素的下标  -1不影响程序的运行
-						for(int i =0;i<dishNames.length;i++){ //查找第一个为空的数组  找到它的下标 
-							if(dishNames[i]==null){  //
-								index = i+1;
+						do {
+							System.out.println("*********************");
+							System.out.println("1.添加菜品");
+							System.out.println("2.修改菜价");
+							System.out.println("3.删除菜品");
+							System.out.println("4.今日营业额");
+							System.out.println("*********************");
+							System.out.println("请输入您的操作(输0返回上级)：");
+
+							int ManagerChoose = input.nextInt();
+							if(ManagerChoose==0){
 								break;
 							}
-						}
-						
-						//保存数据
-						prices[index-1]=price;
-						dianZanNums[index-1]=0;
-						dishNames[index-1]=tianJiaDishName;
-						System.out.println("添加成功!!!");
-						
-						
-						System.out.println("序号\t菜名\t单价");
-						for(int i =0;i<dishNames.length;i++){ // 添加完成后 再次遍历 显示已添加的 菜品名字 和 单价 
-							if(dishNames[i]!=null){
-								System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
+							switch (ManagerChoose) {
+							case 1:
+								System.out.println("******添加菜品********");
+								System.out.println("序号\t菜名\t单价");//遍历已有菜单
+								for(int i =0;i<dishNames.length;i++){
+									if(dishNames[i]!=null){
+									System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
+									}
 								}
-						}
+								System.out.println("菜品名称:");
+								String tianJiaDishName = input.next();
+								System.out.println("请输入菜品价格:");
+								double price = input.nextInt();
+								int index=-1;//初始化 插入元素的下标  -1不影响程序的运行
+								for(int i =0;i<dishNames.length;i++){ //查找第一个为空的数组  找到它的下标 
+									if(dishNames[i]==null){  //
+										index = i+1;
+										break;
+									}
+								}
+								
+								//保存数据
+								prices[index-1]=price;
+								dianZanNums[index-1]=0;
+								dishNames[index-1]=tianJiaDishName;
+								System.out.println("添加成功!!!");
+								
+								
+								System.out.println("序号\t菜名\t单价");
+								for(int i =0;i<dishNames.length;i++){ // 添加完成后 再次遍历 显示已添加的 菜品名字 和 单价 
+									if(dishNames[i]!=null){
+										System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
+										}
+								}
+								break;
+							case 2:
+								int indexCase62=dishNames.length;//定义要修改的菜品下标
+								System.out.println("******修改菜价********");
+								System.out.println("序号\t菜名\t单价");//遍历已有菜单
+								for(int i =0;i<dishNames.length;i++){
+									if(dishNames[i]!=null){
+									System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
+									}
+								}
+								System.out.print("请输入您要修改的菜品序号：");
+								int xiuGaiDishChoose = input.nextInt();
+								for (int i = 0; i < dishNames.length; i++) {
+									if(dishNames[i]!=null){//找到菜品不为空的最后一个下标
+										indexCase62=i;
+									}
+								}
+								if(xiuGaiDishChoose<=0||xiuGaiDishChoose>indexCase62+1){
+									System.out.println("没有找到您要删除的序号！！");
+									break;
+									}else{
+										System.out.print("修改后的价格为：");
+										double xiuGaiHouDish = input.nextDouble(); 
+										prices[xiuGaiDishChoose-1]= xiuGaiHouDish;	//将修改后的价格 赋值给原有的价格上
+										System.out.println("修改成功！！！");
+									}
+								
+								
+								
+								break;
+							case 3:
+								System.out.println("******删除菜品********");
+								System.out.println("序号\t菜名\t单价");//遍历已有菜单
+								for(int i =0;i<dishNames.length;i++){
+									if(dishNames[i]!=null){
+									System.out.println((i+1)+"\t"+dishNames[i]+"\t"+prices[i]);
+									}
+								}
+								System.out.println("请输入您要删除菜品的序号：");
+								int delDish = input.nextInt();
+								int indexCase63=dishNames.length;//定义要删除的那个菜品下标
+								for (int i = 0; i < dishNames.length; i++) {
+									if(dishNames[i]!=null){
+										indexCase63=i;
+									}
+								}
+								if(delDish<=0||delDish>indexCase63+1){
+									System.out.println("没有找到您要删除的序号！！");
+									break;
+								}else{
+									 for (int i = indexCase63; i < dishNames.length; i++) {
+										dishNames[i-1]=dishNames[i];
+										prices[i-1]=prices[i];
+										
+									}
+									 dishNames[dishNames.length-1]=null;
+									 prices[dishNames.length-1]=0;
+									 System.out.println("该菜品删除成功！！");
+								}
+								
+								
+									
+								break;
+							case 4:
+								System.out.println("******今日营业额********");
+								double sum=0;
+								for (int i = 0; i < sumPrices.length; i++) {//遍历并累加 sumPrices数组
+									sum+=sumPrices[i];
+								}
+								System.out.println("今日营业额为："+sum);
+								break;
+							default:
+								System.out.println("没有找到该操作！！！");
+								break;
+							}
+							// 当用户输入的功能标号为 1-3之外的数字时，退出循环，否者将会提示输入0返回
+							if(ManagerChoose<1||ManagerChoose>4){
+								break;
+							}
+							System.out.println("输入任意值返回!!!");
+							manageFanHui = input.next();
+							 if(manageFanHui=="0"){
+								 break;
+							 }
+							
+							
+						} while (manageFanHui!=null);
+						
 					}else{
-						System.out.println("密码输入错误!!!");
+						System.out.println("密码输入错误!!!\n您没有此权限!!!");
 					}
 					break;
 				case 7:
